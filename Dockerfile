@@ -11,14 +11,15 @@ RUN apt-get update && \
 
 ENV NVM_DIR /root/.nvm
 
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash \
+COPY install.sh /tmp/install.sh
+RUN bash /tmp/install.sh \
     && . "$NVM_DIR/nvm.sh" \
     && nvm install node \
     && nvm use node
 
 WORKDIR /usr/src/app
 COPY . .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --no-cache-dir -r requirements.txt
 RUN python -m venv pilot-env
 RUN /bin/bash -c "source pilot-env/bin/activate"
 
